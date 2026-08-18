@@ -11,7 +11,7 @@ export default function QuizPage() {
 
   const [user, setUser] = useState(null)
   const [questions, setQuestions] = useState([])
-  const [answers, setAnswers] = useState({})
+  const [selectedAnswers, setSelectedAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -29,7 +29,6 @@ export default function QuizPage() {
       }
       setUser(user)
 
-      // Fetch existing questions
       const { data: questionData } = await supabase
         .from('quiz_questions')
         .select('*')
@@ -38,7 +37,6 @@ export default function QuizPage() {
       if (questionData && questionData.length > 0) {
         setQuestions(questionData)
       } else {
-        // Try generating questions via API
         await generateQuizQuestions()
       }
       setLoading(false)
@@ -49,7 +47,7 @@ export default function QuizPage() {
 
   const generateQuizQuestions = async () => {
     setGenerating(true)
-    setMessage('Generating quiz questions from note...')
+    setMessage('Generating multiple-choice questions...')
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
     try {
       const res = await fetch(`${apiUrl}/generate-quiz/${noteId}`, { method: 'POST' })
@@ -70,8 +68,9 @@ export default function QuizPage() {
     setGenerating(false)
   }
 
-  const handleInputChange = (qId, value) => {
-    setAnswers(prev => ({ ...prev, [qId]: value }))
+  const handleSelectOption = (qId, optionText) => {
+    if (submitted) return
+    setSelectedAnswers(prev => ({ ...prev, [qId]: optionText }))
   }
 
   const handleSubmit = async (e) => {
@@ -80,10 +79,11 @@ export default function QuizPage() {
 
     let correctCount = 0
     const attemptInserts = []
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
     for (const q of questions) {
-      const userAnswer = (answers[q.id] || '').trim().toLowerCase()
-      const isCorrect = userAnswer === q.correct_answer.toLowerCase()
+      const selected = (selectedAnswers[q.id] || '').trim().toLowerCase()
+      const isCorrect = selected === q.correct_answer.toLowerCase()
       if (isCorrect) correctCount++
 
       attemptInserts.push({
@@ -91,9 +91,16 @@ export default function QuizPage() {
         question_id: q.id,
         is_correct: isCorrect
       })
+
+      // SM-2 Spaced repetition call (quality = 5 for correct, 1 for incorrect)
+      const quality = isCorrect ? 5 : 1
+      try {
+        fetch(`${apiUrl}/review/${user.id}/${q.id}?quality=${quality}`, { method: 'POST' }).catch(() => {})
+      } catch (err) {
+        console.error('SM-2 Review call failed:', err)
+      }
     }
 
-    // Insert attempts into Supabase
     await supabase.from('quiz_attempts').insert(attemptInserts)
 
     setScore(correctCount)
@@ -109,11 +116,14 @@ export default function QuizPage() {
       </Link>
 
       <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 style={{ margin: 0 }}>Practice Quiz</h1>
+        <div>
+          <h1 style={{ margin: 0 }}>Multiple-Choice Quiz</h1>
+          <p style={{ color: '#666', margin: '5px 0 0 0', fontSize: '14px' }}>Select the correct answer for each question</p>
+        </div>
         <button
           onClick={generateQuizQuestions}
           disabled={generating}
-          style={{ padding: '6px 12px', backgroundColor: '#4a5568', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+          style={{ padding: '8px 14px', backgroundColor: '#4a5568', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
         >
           {generating ? 'Regenerating...' : 'Regenerate Questions'}
         </button>
@@ -135,32 +145,68 @@ export default function QuizPage() {
       ) : (
         <form onSubmit={handleSubmit} style={{ marginTop: '30px' }}>
           {questions.map((q, idx) => {
-            const userAnswer = (answers[q.id] || '').trim()
-            const isCorrect = userAnswer.toLowerCase() === q.correct_answer.toLowerCase()
+            const selectedOpt = selectedAnswers[q.id]
+            const options = q.options && Array.isArray(q.options) && q.options.length > 0
+              ? q.options
+              : [q.correct_answer]
 
             return (
-              <div key={q.id} style={{ marginBottom: '25px', padding: '15px', border: '1px solid #e2e8f0', borderRadius: '6px', backgroundColor: '#f7fafc' }}>
-                <p style={{ fontWeight: 'bold', margin: '0 0 10px 0' }}>
+              <div key={q.id} style={{ marginBottom: '25px', padding: '20px', border: '1px solid #e2e8f0', borderRadius: '8px', backgroundColor: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                <p style={{ fontWeight: '600', fontSize: '16px', margin: '0 0 15px 0', color: '#2d3748' }}>
                   {idx + 1}. {q.question}
                 </p>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                  <input
-                    type="text"
-                    placeholder="Fill in the blank word..."
-                    value={answers[q.id] || ''}
-                    disabled={submitted}
-                    onChange={(e) => handleInputChange(q.id, e.target.value)}
-                    style={{ padding: '8px', flex: '1', borderRadius: '4px', border: '1px solid #cbd5e0' }}
-                  />
-                  {submitted && (
-                    <span style={{
-                      fontWeight: 'bold',
-                      color: isCorrect ? 'green' : 'red',
-                      fontSize: '14px'
-                    }}>
-                      {isCorrect ? '✓ Correct!' : `✗ Correct answer: "${q.correct_answer}"`}
-                    </span>
-                  )}
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  {options.map((opt, oIdx) => {
+                    const optionLetter = String.fromCharCode(65 + oIdx)
+                    const isSelected = selectedOpt === opt
+                    const isCorrectOpt = opt.toLowerCase() === q.correct_answer.toLowerCase()
+
+                    let btnBg = '#f7fafc'
+                    let btnBorder = '#cbd5e0'
+                    let btnColor = '#2d3748'
+
+                    if (isSelected) {
+                      btnBg = '#ebf8ff'
+                      btnBorder = '#3182ce'
+                      btnColor = '#2b6cb0'
+                    }
+
+                    if (submitted) {
+                      if (isCorrectOpt) {
+                        btnBg = '#c6f6d5'
+                        btnBorder = '#38a169'
+                        btnColor = '#22543d'
+                      } else if (isSelected && !isCorrectOpt) {
+                        btnBg = '#fed7d7'
+                        btnBorder = '#e53e3e'
+                        btnColor = '#9b2c2c'
+                      }
+                    }
+
+                    return (
+                      <button
+                        key={oIdx}
+                        type="button"
+                        onClick={() => handleSelectOption(q.id, opt)}
+                        disabled={submitted}
+                        style={{
+                          padding: '12px 16px',
+                          textAlign: 'left',
+                          borderRadius: '6px',
+                          border: `2px solid ${btnBorder}`,
+                          backgroundColor: btnBg,
+                          color: btnColor,
+                          fontWeight: isSelected || (submitted && isCorrectOpt) ? 'bold' : 'normal',
+                          cursor: submitted ? 'default' : 'pointer',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        <span style={{ marginRight: '8px', opacity: 0.7 }}>{optionLetter}.</span>
+                        {opt}
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
             )
@@ -169,22 +215,33 @@ export default function QuizPage() {
           {!submitted ? (
             <button
               type="submit"
-              style={{ width: '100%', padding: '12px', backgroundColor: '#319795', color: '#fff', border: 'none', borderRadius: '6px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }}
+              disabled={Object.keys(selectedAnswers).length === 0}
+              style={{
+                width: '100%',
+                padding: '14px',
+                backgroundColor: Object.keys(selectedAnswers).length > 0 ? '#319795' : '#a0aec0',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                cursor: Object.keys(selectedAnswers).length > 0 ? 'pointer' : 'not-allowed'
+              }}
             >
-              Submit Quiz Answers
+              Submit Multiple-Choice Answers
             </button>
           ) : (
             <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: '8px', textAlign: 'center' }}>
               <h2 style={{ margin: '0 0 10px 0', color: '#276749' }}>
-                Quiz Results: {score} / {questions.length} ({Math.round((score / questions.length) * 100)}%)
+                Quiz Score: {score} / {questions.length} ({Math.round((score / questions.length) * 100)}%)
               </h2>
-              <p style={{ color: '#2f855a' }}>Your score has been logged to your progress dashboard!</p>
+              <p style={{ color: '#2f855a' }}>✨ Spaced repetition intervals updated! Your memory retention score has been adjusted.</p>
               <button
                 type="button"
-                onClick={() => { setSubmitted(false); setAnswers({}) }}
+                onClick={() => { setSubmitted(false); setSelectedAnswers({}) }}
                 style={{ padding: '8px 16px', backgroundColor: '#2f855a', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px' }}
               >
-                Try Again
+                Retake Quiz
               </button>
             </div>
           )}

@@ -5,7 +5,6 @@ import { supabase } from '@/lib/supabaseClient'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 
-// Dynamic import to avoid SSR issues with Recharts
 const RechartsComponents = dynamic(() => import('./DashboardCharts'), { ssr: false })
 
 export default function DashboardPage() {
@@ -13,6 +12,8 @@ export default function DashboardPage() {
   const [notes, setNotes] = useState([])
   const [attempts, setAttempts] = useState([])
   const [stats, setStats] = useState({ totalNotes: 0, totalAttempts: 0, accuracy: 0 })
+  const [streak, setStreak] = useState({ streak: 0, studied_today: false })
+  const [dueCount, setDueCount] = useState(0)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
@@ -24,6 +25,8 @@ export default function DashboardPage() {
         return
       }
       setUser(user)
+
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
       // Fetch user notes
       const { data: notesData } = await supabase
@@ -58,6 +61,26 @@ export default function DashboardPage() {
         })
       }
 
+      // Fetch streak & due questions from backend API
+      try {
+        const [streakRes, dueRes] = await Promise.all([
+          fetch(`${apiUrl}/streak/${user.id}`),
+          fetch(`${apiUrl}/due-questions/${user.id}`)
+        ])
+
+        const streakData = await streakRes.json()
+        const dueData = await dueRes.json()
+
+        if (streakData && streakData.streak !== undefined) {
+          setStreak(streakData)
+        }
+        if (dueData && dueData.count !== undefined) {
+          setDueCount(dueData.count)
+        }
+      } catch (err) {
+        console.error('Error fetching streak or due questions:', err)
+      }
+
       setLoading(false)
     }
 
@@ -78,10 +101,15 @@ export default function DashboardPage() {
           <h1 style={{ margin: 0 }}>Study Buddy Dashboard</h1>
           <p style={{ margin: '5px 0 0 0', color: '#666' }}>Logged in as: {user?.email}</p>
         </div>
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {/* Flame streak badge */}
+          <div style={{ padding: '6px 14px', backgroundColor: '#fffaf0', border: '1px solid #feebc8', borderRadius: '20px', fontWeight: 'bold', color: '#dd6b20', fontSize: '14px' }}>
+            🔥 {streak.streak} Day Streak
+          </div>
+
           <button
             onClick={() => router.push('/upload')}
-            style={{ padding: '8px 16px', marginRight: '10px', cursor: 'pointer', backgroundColor: '#0070f3', color: '#fff', border: 'none', borderRadius: '4px' }}
+            style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#0070f3', color: '#fff', border: 'none', borderRadius: '4px' }}
           >
             + Upload Note
           </button>
@@ -93,6 +121,19 @@ export default function DashboardPage() {
           </button>
         </div>
       </header>
+
+      {/* Due Review Banner */}
+      {dueCount > 0 && (
+        <div style={{ marginBottom: '25px', padding: '15px 20px', backgroundColor: '#ebf8ff', border: '1px solid #bee3f8', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <h3 style={{ margin: '0 0 4px 0', color: '#2b6cb0' }}>🔁 {dueCount} Questions Due for Review Today!</h3>
+            <p style={{ margin: 0, fontSize: '14px', color: '#4a5568' }}>SM-2 Spaced Repetition algorithms recommend reviewing these now for long-term retention.</p>
+          </div>
+          <Link href="/review" style={{ padding: '8px 16px', backgroundColor: '#3182ce', color: '#fff', textDecoration: 'none', borderRadius: '6px', fontWeight: 'bold' }}>
+            Start Review &rarr;
+          </Link>
+        </div>
+      )}
 
       {/* Stats Cards */}
       <section style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', marginBottom: '30px' }}>
