@@ -292,13 +292,23 @@ export default function DashboardPage() {
         </div>
 
         <div
-          className="bento-card bento-action bento-span-2"
+          className="bento-card bento-action"
+          style={{ background: 'linear-gradient(135deg, #1c1917 0%, #292524 100%)', border: '1px solid #44403c' }}
+          onClick={() => router.push('/study-time')}
+        >
+          <span className="action-icon">⏱️</span>
+          <span className="action-label">Study Time</span>
+          <span style={{ fontSize: '12px', fontWeight: 600, color: '#fbbf24' }}>Pomodoro & Todos</span>
+        </div>
+
+        <div
+          className="bento-card bento-action"
           style={{ background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)', border: '1px solid #4338ca' }}
           onClick={() => router.push('/progress')}
         >
           <span className="action-icon">📈</span>
-          <span className="action-label">View Progress & Analytics</span>
-          <span style={{ fontSize: '12px', fontWeight: 600, color: '#a5b4fc' }}>Charts & Attempt History</span>
+          <span className="action-label">Analytics</span>
+          <span style={{ fontSize: '12px', fontWeight: 600, color: '#a5b4fc' }}>Progress Charts</span>
         </div>
       </main>
     </div>

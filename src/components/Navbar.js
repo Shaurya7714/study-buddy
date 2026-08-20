@@ -15,6 +15,7 @@ export default function Navbar({ user, streak = 0 }) {
   const navItems = [
     { label: 'Dashboard', path: '/dashboard', icon: '🏠' },
     { label: 'Progress & Analytics', path: '/progress', icon: '📈' },
+    { label: 'Study Time', path: '/study-time', icon: '⏱️' },
     { label: 'Upload Note', path: '/upload', icon: '📤' },
     { label: 'Review', path: '/review', icon: '🔁' },
   ]

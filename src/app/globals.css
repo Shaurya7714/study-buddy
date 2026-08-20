@@ -284,6 +284,97 @@ body {
 }
 
 /* ==============================
+   RETRO WINDOW WIDGET SYSTEM (Study Time Page)
+   ============================== */
+
+.retro-window {
+  background-color: #faf6f0;
+  border: 2px solid #4a2c11;
+  border-radius: 16px;
+  box-shadow: 6px 6px 0px #4a2c11, 0 12px 30px rgba(0,0,0,0.4);
+  overflow: hidden;
+  font-family: 'Courier New', Courier, monospace, sans-serif;
+  color: #4a2c11;
+}
+
+.retro-window-header {
+  background-color: #e6d3be;
+  border-bottom: 2px solid #4a2c11;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.retro-window-title {
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #4a2c11;
+}
+
+.retro-window-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.retro-control-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1.5px solid #4a2c11;
+  background-color: #faf6f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  color: #4a2c11;
+  cursor: pointer;
+  user-select: none;
+}
+
+.retro-control-btn:hover {
+  background-color: #d6be9f;
+}
+
+.retro-window-body {
+  padding: 24px;
+}
+
+/* Mode tabs for Pomodoro */
+.retro-tabs {
+  display: flex;
+  border-top: 2px solid #4a2c11;
+  background-color: #e6d3be;
+}
+
+.retro-tab {
+  flex: 1;
+  padding: 12px 8px;
+  text-align: center;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #4a2c11;
+  border-right: 2px solid #4a2c11;
+  cursor: pointer;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.retro-tab:last-child {
+  border-right: none;
+}
+
+.retro-tab.active {
+  background-color: #faf6f0;
+  box-shadow: inset 0 3px 0 #4a2c11;
+}
+
+/* ==============================
    LOADING SKELETON
    ============================== */
 
@@ -324,7 +415,7 @@ body {
 }
 
 /* ==============================
-   LEGACY (keep for other pages)
+   LEGACY
    ============================== */
 
 .stat-card {
