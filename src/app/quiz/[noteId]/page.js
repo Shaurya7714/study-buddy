@@ -107,39 +107,57 @@ export default function QuizPage() {
     setSubmitted(true)
   }
 
-  if (loading) return <p style={{ padding: '20px' }}>Loading Quiz...</p>
+  if (loading) return <p style={{ padding: '20px', color: '#f8fafc', fontWeight: 700 }}>Loading Quiz...</p>
 
   return (
-    <div style={{ padding: '20px', maxWidth: '700px', margin: '0 auto' }}>
-      <Link href="/dashboard" style={{ textDecoration: 'none', color: '#0070f3' }}>
+    <div style={{ padding: '30px', maxWidth: '700px', margin: '0 auto' }}>
+      <Link href="/dashboard" style={{ textDecoration: 'none', color: '#38bdf8', fontWeight: 700, fontSize: '14px' }}>
         &larr; Back to Dashboard
       </Link>
 
-      <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ margin: 0 }}>Multiple-Choice Quiz</h1>
-          <p style={{ color: '#666', margin: '5px 0 0 0', fontSize: '14px' }}>Select the correct answer for each question</p>
+          <h1 style={{ margin: 0, color: '#f8fafc', fontSize: '26px', fontWeight: 900 }}>Multiple-Choice Quiz</h1>
+          <p style={{ color: '#94a3b8', margin: '6px 0 0 0', fontSize: '14px', fontWeight: 600 }}>Select the correct answer for each question</p>
         </div>
         <button
           onClick={generateQuizQuestions}
           disabled={generating}
-          style={{ padding: '8px 14px', backgroundColor: '#4a5568', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+          style={{
+            padding: '10px 16px',
+            backgroundColor: '#334155',
+            color: '#f8fafc',
+            border: '1px solid #475569',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: 700,
+            fontSize: '13px'
+          }}
         >
-          {generating ? 'Regenerating...' : 'Regenerate Questions'}
+          {generating ? '⏳ Regenerating...' : '🔄 Regenerate Questions'}
         </button>
       </div>
 
-      {message && <p style={{ color: '#d69e2e', marginTop: '10px' }}>{message}</p>}
+      {message && <p style={{ color: '#fbbf24', marginTop: '12px', fontWeight: 700, fontSize: '14px' }}>{message}</p>}
 
       {questions.length === 0 ? (
-        <div style={{ marginTop: '30px', textAlign: 'center', padding: '30px', border: '1px dashed #cbd5e0', borderRadius: '8px' }}>
-          <p>No questions generated yet.</p>
+        <div style={{ marginTop: '30px', textAlign: 'center', padding: '40px', border: '2px dashed #334155', borderRadius: '12px', backgroundColor: '#1e293b' }}>
+          <p style={{ color: '#cbd5e1', fontWeight: 700, fontSize: '16px', marginBottom: '16px' }}>No questions generated yet.</p>
           <button
             onClick={generateQuizQuestions}
             disabled={generating}
-            style={{ padding: '10px 20px', backgroundColor: '#319795', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: '#0d9488',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: 800,
+              fontSize: '15px'
+            }}
           >
-            {generating ? 'Generating Questions...' : 'Generate Quiz Questions'}
+            {generating ? '⏳ Generating Questions...' : '🚀 Generate Quiz Questions'}
           </button>
         </div>
       ) : (
@@ -151,8 +169,8 @@ export default function QuizPage() {
               : [q.correct_answer]
 
             return (
-              <div key={q.id} style={{ marginBottom: '25px', padding: '20px', border: '1px solid #e2e8f0', borderRadius: '8px', backgroundColor: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-                <p style={{ fontWeight: '600', fontSize: '16px', margin: '0 0 15px 0', color: '#2d3748' }}>
+              <div key={q.id} style={{ marginBottom: '20px', padding: '24px', border: '1px solid #334155', borderRadius: '14px', backgroundColor: '#1e293b', boxShadow: '0 4px 16px rgba(0,0,0,0.25)' }}>
+                <p style={{ fontWeight: 800, fontSize: '17px', margin: '0 0 16px 0', color: '#f8fafc', lineHeight: 1.5 }}>
                   {idx + 1}. {q.question}
                 </p>
 
@@ -162,25 +180,25 @@ export default function QuizPage() {
                     const isSelected = selectedOpt === opt
                     const isCorrectOpt = opt.toLowerCase() === q.correct_answer.toLowerCase()
 
-                    let btnBg = '#f7fafc'
-                    let btnBorder = '#cbd5e0'
-                    let btnColor = '#2d3748'
+                    let btnBg = '#0f172a'
+                    let btnBorder = '#334155'
+                    let btnColor = '#f8fafc'
 
                     if (isSelected) {
-                      btnBg = '#ebf8ff'
-                      btnBorder = '#3182ce'
-                      btnColor = '#2b6cb0'
+                      btnBg = '#1e3a8a'
+                      btnBorder = '#3b82f6'
+                      btnColor = '#ffffff'
                     }
 
                     if (submitted) {
                       if (isCorrectOpt) {
-                        btnBg = '#c6f6d5'
-                        btnBorder = '#38a169'
-                        btnColor = '#22543d'
+                        btnBg = '#064e3b'
+                        btnBorder = '#10b981'
+                        btnColor = '#ecfdf5'
                       } else if (isSelected && !isCorrectOpt) {
-                        btnBg = '#fed7d7'
-                        btnBorder = '#e53e3e'
-                        btnColor = '#9b2c2c'
+                        btnBg = '#7f1d1d'
+                        btnBorder = '#ef4444'
+                        btnColor = '#fef2f2'
                       }
                     }
 
@@ -191,18 +209,19 @@ export default function QuizPage() {
                         onClick={() => handleSelectOption(q.id, opt)}
                         disabled={submitted}
                         style={{
-                          padding: '12px 16px',
+                          padding: '14px 16px',
                           textAlign: 'left',
-                          borderRadius: '6px',
+                          borderRadius: '10px',
                           border: `2px solid ${btnBorder}`,
                           backgroundColor: btnBg,
                           color: btnColor,
-                          fontWeight: isSelected || (submitted && isCorrectOpt) ? 'bold' : 'normal',
+                          fontWeight: isSelected || (submitted && isCorrectOpt) ? 800 : 600,
                           cursor: submitted ? 'default' : 'pointer',
-                          transition: 'all 0.2s ease'
+                          transition: 'all 0.2s ease',
+                          fontSize: '14px'
                         }}
                       >
-                        <span style={{ marginRight: '8px', opacity: 0.7 }}>{optionLetter}.</span>
+                        <span style={{ marginRight: '8px', color: '#38bdf8', fontWeight: 800 }}>{optionLetter}.</span>
                         {opt}
                       </button>
                     )
@@ -219,29 +238,40 @@ export default function QuizPage() {
               style={{
                 width: '100%',
                 padding: '14px',
-                backgroundColor: Object.keys(selectedAnswers).length > 0 ? '#319795' : '#a0aec0',
-                color: '#fff',
+                backgroundColor: Object.keys(selectedAnswers).length > 0 ? '#0d9488' : '#475569',
+                color: '#ffffff',
                 border: 'none',
-                borderRadius: '6px',
+                borderRadius: '8px',
                 fontSize: '16px',
-                fontWeight: 'bold',
-                cursor: Object.keys(selectedAnswers).length > 0 ? 'pointer' : 'not-allowed'
+                fontWeight: 800,
+                cursor: Object.keys(selectedAnswers).length > 0 ? 'pointer' : 'not-allowed',
+                letterSpacing: '0.3px'
               }}
             >
               Submit Multiple-Choice Answers
             </button>
           ) : (
-            <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: '8px', textAlign: 'center' }}>
-              <h2 style={{ margin: '0 0 10px 0', color: '#276749' }}>
+            <div style={{ marginTop: '20px', padding: '28px', backgroundColor: '#064e3b', border: '1px solid #10b981', borderRadius: '12px', textAlign: 'center' }}>
+              <h2 style={{ margin: '0 0 10px 0', color: '#34d399', fontSize: '22px', fontWeight: 900 }}>
                 Quiz Score: {score} / {questions.length} ({Math.round((score / questions.length) * 100)}%)
               </h2>
-              <p style={{ color: '#2f855a' }}>✨ Spaced repetition intervals updated! Your memory retention score has been adjusted.</p>
+              <p style={{ color: '#a7f3d0', fontWeight: 600 }}>✨ Spaced repetition intervals updated! Your memory retention score has been adjusted.</p>
               <button
                 type="button"
                 onClick={() => { setSubmitted(false); setSelectedAnswers({}) }}
-                style={{ padding: '8px 16px', backgroundColor: '#2f855a', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px' }}
+                style={{
+                  padding: '10px 20px',
+                  backgroundColor: '#10b981',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  marginTop: '12px',
+                  fontWeight: 800,
+                  fontSize: '15px'
+                }}
               >
-                Retake Quiz
+                🔄 Retake Quiz
               </button>
             </div>
           )}

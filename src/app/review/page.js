@@ -70,46 +70,46 @@ export default function ReviewPage() {
     }
   }
 
-  if (loading) return <p style={{ padding: '20px' }}>Loading Spaced Repetition Review...</p>
+  if (loading) return <p style={{ padding: '20px', color: '#f8fafc', fontWeight: 700 }}>Loading Spaced Repetition Review...</p>
 
   return (
-    <div style={{ padding: '20px', maxWidth: '650px', margin: '0 auto' }}>
-      <Link href="/dashboard" style={{ textDecoration: 'none', color: '#0070f3' }}>
+    <div style={{ padding: '30px', maxWidth: '650px', margin: '0 auto' }}>
+      <Link href="/dashboard" style={{ textDecoration: 'none', color: '#38bdf8', fontWeight: 700, fontSize: '14px' }}>
         &larr; Back to Dashboard
       </Link>
 
-      <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-        <h1 style={{ margin: 0 }}>🔁 Spaced Repetition Review (SM-2)</h1>
-        <p style={{ color: '#666', margin: '5px 0 0 0' }}>Smart memory review tailored to your recall history</p>
+      <div style={{ marginTop: '24px', marginBottom: '24px' }}>
+        <h1 style={{ margin: 0, color: '#f8fafc', fontSize: '26px', fontWeight: 900 }}>🔁 Spaced Repetition Review (SM-2)</h1>
+        <p style={{ color: '#94a3b8', margin: '6px 0 0 0', fontWeight: 600, fontSize: '14px' }}>Smart memory review tailored to your recall history</p>
       </div>
 
       {dueQuestions.length === 0 ? (
-        <div style={{ padding: '30px', backgroundColor: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: '8px', textAlign: 'center' }}>
-          <h2 style={{ color: '#276749', margin: '0 0 10px 0' }}>🎉 You're all caught up!</h2>
-          <p style={{ color: '#2f855a' }}>No questions are due for review right now. Check back tomorrow!</p>
-          <Link href="/dashboard" style={{ display: 'inline-block', marginTop: '15px', padding: '8px 16px', backgroundColor: '#2f855a', color: '#fff', textDecoration: 'none', borderRadius: '4px' }}>
+        <div style={{ padding: '40px', backgroundColor: '#064e3b', border: '1px solid #10b981', borderRadius: '12px', textAlign: 'center' }}>
+          <h2 style={{ color: '#34d399', margin: '0 0 10px 0', fontSize: '22px', fontWeight: 900 }}>🎉 You're all caught up!</h2>
+          <p style={{ color: '#a7f3d0', fontWeight: 600 }}>No questions are due for review right now. Check back tomorrow!</p>
+          <Link href="/dashboard" style={{ display: 'inline-block', marginTop: '15px', padding: '10px 20px', backgroundColor: '#10b981', color: '#ffffff', textDecoration: 'none', borderRadius: '8px', fontWeight: 800 }}>
             Return to Dashboard
           </Link>
         </div>
       ) : finished ? (
-        <div style={{ padding: '30px', backgroundColor: '#ebf8ff', border: '1px solid #bee3f8', borderRadius: '8px', textAlign: 'center' }}>
-          <h2 style={{ color: '#2b6cb0', margin: '0 0 10px 0' }}>Review Completed!</h2>
-          <p style={{ fontSize: '18px', color: '#2d3748' }}>
-            Score: <strong>{score} / {dueQuestions.length}</strong> ({Math.round((score / dueQuestions.length) * 100)}%)
+        <div style={{ padding: '40px', backgroundColor: '#1e3a8a', border: '1px solid #3b82f6', borderRadius: '12px', textAlign: 'center' }}>
+          <h2 style={{ color: '#93c5fd', margin: '0 0 12px 0', fontSize: '22px', fontWeight: 900 }}>Review Completed!</h2>
+          <p style={{ fontSize: '20px', color: '#f8fafc', fontWeight: 800 }}>
+            Score: {score} / {dueQuestions.length} ({Math.round((score / dueQuestions.length) * 100)}%)
           </p>
-          <p style={{ color: '#4a5568' }}>Your memory intervals have been recalculated by the SM-2 algorithm.</p>
-          <Link href="/dashboard" style={{ display: 'inline-block', marginTop: '15px', padding: '10px 20px', backgroundColor: '#3182ce', color: '#fff', textDecoration: 'none', borderRadius: '4px', fontWeight: 'bold' }}>
+          <p style={{ color: '#bfdbfe', fontWeight: 600 }}>Your memory intervals have been recalculated by the SM-2 algorithm.</p>
+          <Link href="/dashboard" style={{ display: 'inline-block', marginTop: '15px', padding: '12px 24px', backgroundColor: '#3b82f6', color: '#ffffff', textDecoration: 'none', borderRadius: '8px', fontWeight: 800 }}>
             Back to Dashboard
           </Link>
         </div>
       ) : (
-        <div style={{ padding: '25px', border: '1px solid #cbd5e0', borderRadius: '8px', backgroundColor: '#fff' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px', fontSize: '14px', color: '#718096' }}>
-            <span>Question {currentIndex + 1} of {dueQuestions.length}</span>
-            <span>Due Today</span>
+        <div style={{ padding: '28px', border: '1px solid #334155', borderRadius: '14px', backgroundColor: '#1e293b', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '18px', fontSize: '13px' }}>
+            <span style={{ color: '#cbd5e1', fontWeight: 700 }}>Question {currentIndex + 1} of {dueQuestions.length}</span>
+            <span style={{ color: '#38bdf8', fontWeight: 800 }}>Due Today</span>
           </div>
 
-          <h3 style={{ fontSize: '18px', margin: '0 0 20px 0', color: '#2d3748' }}>
+          <h3 style={{ fontSize: '18px', margin: '0 0 22px 0', color: '#f8fafc', fontWeight: 800, lineHeight: 1.5 }}>
             {currentQ?.question}
           </h3>
 
@@ -118,16 +118,19 @@ export default function ReviewPage() {
               const isSelected = selectedOption === opt
               const isCorrectOpt = opt.toLowerCase() === currentQ?.correct_answer.toLowerCase()
 
-              let bg = '#f7fafc'
-              let border = '#cbd5e0'
+              let bg = '#0f172a'
+              let border = '#334155'
+              let textCol = '#f8fafc'
 
               if (isAnswered) {
                 if (isCorrectOpt) {
-                  bg = '#c6f6d5'
-                  border = '#38a169'
+                  bg = '#064e3b'
+                  border = '#10b981'
+                  textCol = '#ecfdf5'
                 } else if (isSelected && !isCorrectOpt) {
-                  bg = '#fed7d7'
-                  border = '#e53e3e'
+                  bg = '#7f1d1d'
+                  border = '#ef4444'
+                  textCol = '#fef2f2'
                 }
               }
 
@@ -137,16 +140,19 @@ export default function ReviewPage() {
                   onClick={() => handleAnswer(opt)}
                   disabled={isAnswered}
                   style={{
-                    padding: '12px',
+                    padding: '14px',
                     textAlign: 'left',
-                    borderRadius: '6px',
+                    borderRadius: '10px',
                     border: `2px solid ${border}`,
                     backgroundColor: bg,
+                    color: textCol,
                     cursor: isAnswered ? 'default' : 'pointer',
-                    fontWeight: isSelected || (isAnswered && isCorrectOpt) ? 'bold' : 'normal'
+                    fontWeight: isSelected || (isAnswered && isCorrectOpt) ? 800 : 600,
+                    fontSize: '14px',
+                    transition: 'all 0.2s ease'
                   }}
                 >
-                  {String.fromCharCode(65 + oIdx)}. {opt}
+                  <span style={{ color: '#38bdf8', marginRight: '8px', fontWeight: 800 }}>{String.fromCharCode(65 + oIdx)}.</span> {opt}
                 </button>
               )
             })}
@@ -157,14 +163,15 @@ export default function ReviewPage() {
               onClick={handleNext}
               style={{
                 width: '100%',
-                padding: '12px',
-                backgroundColor: '#319795',
-                color: '#fff',
+                padding: '14px',
+                backgroundColor: '#0d9488',
+                color: '#ffffff',
                 border: 'none',
-                borderRadius: '6px',
-                fontWeight: 'bold',
+                borderRadius: '8px',
+                fontWeight: 800,
                 fontSize: '16px',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                letterSpacing: '0.3px'
               }}
             >
               {currentIndex + 1 < dueQuestions.length ? 'Next Question →' : 'Finish Review'}

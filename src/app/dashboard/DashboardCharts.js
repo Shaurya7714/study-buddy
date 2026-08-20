@@ -36,22 +36,22 @@ export default function DashboardCharts({ attempts }) {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
 
         {/* Accuracy over time bar chart */}
-        <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '15px', backgroundColor: '#f7fafc' }}>
-          <h3 style={{ margin: '0 0 10px 0', fontSize: '16px', color: '#2d3748' }}>Accuracy Over Time</h3>
+        <div style={{ border: '1px solid #334155', borderRadius: '12px', padding: '20px', backgroundColor: '#1e293b' }}>
+          <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', color: '#f8fafc', fontWeight: 'bold' }}>Accuracy Over Time</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={accuracyData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-              <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} unit="%" />
-              <Tooltip formatter={(value) => `${value}%`} />
-              <Bar dataKey="accuracy" fill="#319795" radius={[4, 4, 0, 0]} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#94a3b8' }} />
+              <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#94a3b8' }} unit="%" />
+              <Tooltip formatter={(value) => `${value}%`} contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f8fafc' }} />
+              <Bar dataKey="accuracy" fill="#38bdf8" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* Correct vs Incorrect pie chart */}
-        <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '15px', backgroundColor: '#f7fafc' }}>
-          <h3 style={{ margin: '0 0 10px 0', fontSize: '16px', color: '#2d3748' }}>Correct vs Incorrect</h3>
+        <div style={{ border: '1px solid #334155', borderRadius: '12px', padding: '20px', backgroundColor: '#1e293b' }}>
+          <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', color: '#f8fafc', fontWeight: 'bold' }}>Correct vs Incorrect</h3>
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
               <Pie

@@ -78,32 +78,33 @@ export default function NoteDetailPage() {
     setReprocessing(false)
   }
 
-  if (loading) return <p style={{ padding: '20px' }}>Loading note details...</p>
+  if (loading) return <p style={{ padding: '20px', color: '#f8fafc', fontWeight: 700 }}>Loading note details...</p>
 
   if (errorMsg) return (
     <div style={{ padding: '20px' }}>
-      <p style={{ color: 'red' }}>{errorMsg}</p>
-      <Link href="/dashboard">Back to Dashboard</Link>
+      <p style={{ color: '#ef4444', fontWeight: 700, fontSize: '16px' }}>{errorMsg}</p>
+      <Link href="/dashboard" style={{ color: '#38bdf8', fontWeight: 700, textDecoration: 'none' }}>Back to Dashboard</Link>
     </div>
   )
 
   return (
-    <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-      <Link href="/dashboard" style={{ textDecoration: 'none', color: '#0070f3' }}>
+    <div style={{ padding: '30px', maxWidth: '800px', margin: '0 auto' }}>
+      <Link href="/dashboard" style={{ textDecoration: 'none', color: '#38bdf8', fontWeight: 700, fontSize: '14px' }}>
         &larr; Back to Dashboard
       </Link>
 
-      <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 style={{ margin: 0 }}>{note.title}</h1>
+      <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1 style={{ margin: 0, color: '#f8fafc', fontSize: '26px', fontWeight: 900 }}>{note.title}</h1>
         <span style={{
-          padding: '4px 10px',
-          borderRadius: '12px',
+          padding: '5px 14px',
+          borderRadius: '20px',
           fontSize: '12px',
-          fontWeight: 'bold',
-          backgroundColor: note.status === 'ready' || note.status === 'summarized' ? '#c6f6d5' : '#feebc8',
-          color: note.status === 'ready' || note.status === 'summarized' ? '#22543d' : '#744210'
+          fontWeight: 800,
+          backgroundColor: note.status === 'ready' || note.status === 'summarized' ? '#064e3b' : '#78350f',
+          color: note.status === 'ready' || note.status === 'summarized' ? '#34d399' : '#fbbf24',
+          letterSpacing: '0.5px'
         }}>
-          STATUS: {note.status.toUpperCase()}
+          {note.status.toUpperCase()}
         </span>
       </div>
 
@@ -111,27 +112,44 @@ export default function NoteDetailPage() {
         <button
           onClick={handleReprocess}
           disabled={reprocessing}
-          style={{ padding: '8px 16px', backgroundColor: '#4a5568', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+          style={{
+            padding: '10px 18px',
+            backgroundColor: '#334155',
+            color: '#f8fafc',
+            border: '1px solid #475569',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: 700,
+            fontSize: '14px'
+          }}
         >
-          {reprocessing ? 'Reprocessing...' : 'Re-run Summarizer & Quiz Generator'}
+          {reprocessing ? '⏳ Reprocessing...' : '🔄 Re-run Summarizer & Quiz Generator'}
         </button>
         <Link
           href={`/quiz/${note.id}`}
-          style={{ padding: '8px 16px', backgroundColor: '#319795', color: '#fff', textDecoration: 'none', borderRadius: '4px' }}
+          style={{
+            padding: '10px 18px',
+            backgroundColor: '#0d9488',
+            color: '#ffffff',
+            textDecoration: 'none',
+            borderRadius: '8px',
+            fontWeight: 700,
+            fontSize: '14px'
+          }}
         >
           Take Quiz &rarr;
         </Link>
       </div>
 
       {/* AI Summary Card */}
-      <section style={{ marginTop: '30px', padding: '20px', backgroundColor: '#ebf8ff', border: '1px solid #bee3f8', borderRadius: '8px' }}>
-        <h2 style={{ margin: '0 0 10px 0', color: '#2b6cb0' }}>✨ AI Key Takeaways Summary</h2>
+      <section style={{ marginTop: '30px', backgroundColor: '#1e3a8a', border: '1px solid #3b82f6', borderRadius: '12px', padding: '24px' }}>
+        <h2 style={{ color: '#93c5fd', margin: '0 0 12px 0', fontSize: '20px', fontWeight: 800 }}>✨ AI Key Takeaways Summary</h2>
         {summary ? (
-          <p style={{ lineHeight: '1.6', fontSize: '16px', color: '#2d3748', margin: 0 }}>
+          <p style={{ color: '#f0f9ff', fontSize: '16px', lineHeight: 1.7, fontWeight: 500, margin: 0 }}>
             {summary.summary_text}
           </p>
         ) : (
-          <p style={{ color: '#718096', margin: 0 }}>
+          <p style={{ color: '#93c5fd', margin: 0, fontWeight: 600 }}>
             Summary is being generated or hasn't been created yet. Click "Re-run Summarizer" above if needed.
           </p>
         )}
@@ -139,17 +157,20 @@ export default function NoteDetailPage() {
 
       {/* Raw Extracted Text */}
       <section style={{ marginTop: '30px' }}>
-        <h2>Raw Extracted Text</h2>
+        <h2 style={{ color: '#f8fafc', marginBottom: '12px', fontSize: '20px', fontWeight: 800 }}>Raw Extracted Text</h2>
         <div style={{
-          padding: '15px',
-          backgroundColor: '#f7fafc',
-          border: '1px solid #e2e8f0',
-          borderRadius: '6px',
-          maxHeight: '300px',
-          overflowY: 'auto',
-          fontFamily: 'monospace',
-          fontSize: '13px',
-          whiteSpace: 'pre-wrap'
+          backgroundColor: '#0f172a',
+          color: '#e2e8f0',
+          border: '1px solid #334155',
+          borderRadius: '10px',
+          padding: '20px',
+          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+          fontSize: '14px',
+          fontWeight: 500,
+          lineHeight: 1.7,
+          whiteSpace: 'pre-wrap',
+          maxHeight: '350px',
+          overflowY: 'auto'
         }}>
           {note.raw_text || 'No extracted text found. Ensure text extraction completed successfully.'}
         </div>

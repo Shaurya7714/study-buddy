@@ -1,26 +1,93 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card-bg: #1e293b;
+  --card-border: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent-blue: #38bdf8;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Force dark card styles across all components */
+.stat-card {
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+  border-radius: 12px !important;
+  padding: 20px 15px !important;
+  text-align: center !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.stat-number {
+  color: #0f172a !important;
+  font-size: 36px !important;
+  font-weight: 900 !important;
+  margin: 0 0 6px 0 !important;
+  letter-spacing: -0.5px !important;
+  display: block !important;
+}
+
+.stat-label {
+  color: #334155 !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  display: block !important;
+}
+
+.theme-card {
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f8fafc !important;
+  border-radius: 8px !important;
+}
+
+.theme-card h1, .theme-card h2, .theme-card h3, .theme-card h4 {
+  color: #f8fafc !important;
+}
+
+.theme-card p, .theme-card span {
+  color: #cbd5e1 !important;
+}
+
+/* Extracted text & summary boxes */
+.extracted-text-box {
+  background-color: #0f172a !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #334155 !important;
+  border-radius: 8px !important;
+  padding: 18px !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  white-space: pre-wrap !important;
+  max-height: 350px !important;
+  overflow-y: auto !important;
+}
+
+.summary-card {
+  background-color: #1e3a8a !important;
+  border: 1px solid #3b82f6 !important;
+  border-radius: 10px !important;
+  padding: 20px !important;
+}
+
+.summary-card h2 {
+  color: #93c5fd !important;
+  margin: 0 0 10px 0 !important;
+}
+
+.summary-card p {
+  color: #f0f9ff !important;
+  font-size: 16px !important;
+  line-height: 1.6 !important;
 }

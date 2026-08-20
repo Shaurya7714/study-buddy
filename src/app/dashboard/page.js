@@ -95,27 +95,27 @@ export default function DashboardPage() {
   if (loading) return <p style={{ padding: '20px' }}>Loading Dashboard...</p>
 
   return (
-    <div style={{ padding: '20px', maxWidth: '900px', margin: '0 auto' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
+    <div style={{ padding: '30px', maxWidth: '900px', margin: '0 auto' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid #475569', paddingBottom: '14px' }}>
         <div>
-          <h1 style={{ margin: 0 }}>Study Buddy Dashboard</h1>
-          <p style={{ margin: '5px 0 0 0', color: '#666' }}>Logged in as: {user?.email}</p>
+          <h1 style={{ margin: 0, color: '#f8fafc', fontSize: '26px', fontWeight: 900 }}>Study Buddy Dashboard</h1>
+          <p style={{ margin: '6px 0 0 0', color: '#94a3b8', fontSize: '14px', fontWeight: 600 }}>Logged in as: <strong style={{ color: '#f8fafc', fontWeight: 800 }}>{user?.email}</strong></p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           {/* Flame streak badge */}
-          <div style={{ padding: '6px 14px', backgroundColor: '#fffaf0', border: '1px solid #feebc8', borderRadius: '20px', fontWeight: 'bold', color: '#dd6b20', fontSize: '14px' }}>
+          <div style={{ padding: '6px 14px', backgroundColor: '#78350f', border: '1px solid #b45309', borderRadius: '20px', fontWeight: 800, color: '#fbbf24', fontSize: '14px' }}>
             🔥 {streak.streak} Day Streak
           </div>
 
           <button
             onClick={() => router.push('/upload')}
-            style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#0070f3', color: '#fff', border: 'none', borderRadius: '4px' }}
+            style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#0070f3', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 800, fontSize: '14px' }}
           >
             + Upload Note
           </button>
           <button
             onClick={handleLogout}
-            style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#e53e3e', color: '#fff', border: 'none', borderRadius: '4px' }}
+            style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#dc2626', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 800, fontSize: '14px' }}
           >
             Log Out
           </button>
@@ -124,12 +124,12 @@ export default function DashboardPage() {
 
       {/* Due Review Banner */}
       {dueCount > 0 && (
-        <div style={{ marginBottom: '25px', padding: '15px 20px', backgroundColor: '#ebf8ff', border: '1px solid #bee3f8', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ marginBottom: '25px', padding: '18px 22px', backgroundColor: '#1e3a8a', border: '1px solid #3b82f6', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h3 style={{ margin: '0 0 4px 0', color: '#2b6cb0' }}>🔁 {dueCount} Questions Due for Review Today!</h3>
-            <p style={{ margin: 0, fontSize: '14px', color: '#4a5568' }}>SM-2 Spaced Repetition algorithms recommend reviewing these now for long-term retention.</p>
+            <h3 style={{ margin: '0 0 4px 0', color: '#93c5fd', fontWeight: 800, fontSize: '16px' }}>🔁 {dueCount} Questions Due for Review Today!</h3>
+            <p style={{ margin: 0, fontSize: '13px', color: '#bfdbfe', fontWeight: 600 }}>SM-2 Spaced Repetition algorithms recommend reviewing these now for long-term retention.</p>
           </div>
-          <Link href="/review" style={{ padding: '8px 16px', backgroundColor: '#3182ce', color: '#fff', textDecoration: 'none', borderRadius: '6px', fontWeight: 'bold' }}>
+          <Link href="/review" style={{ padding: '10px 18px', backgroundColor: '#3b82f6', color: '#fff', textDecoration: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '14px' }}>
             Start Review &rarr;
           </Link>
         </div>
@@ -137,17 +137,17 @@ export default function DashboardPage() {
 
       {/* Stats Cards */}
       <section style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', marginBottom: '30px' }}>
-        <div style={{ padding: '15px', border: '1px solid #e2e8f0', borderRadius: '8px', textAlign: 'center', backgroundColor: '#f7fafc' }}>
-          <h3 style={{ margin: '0 0 5px 0', fontSize: '24px' }}>{stats.totalNotes}</h3>
-          <span style={{ color: '#4a5568', fontSize: '14px' }}>Notes Uploaded</span>
+        <div style={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px 15px', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+          <h3 style={{ color: '#0f172a', fontSize: '36px', fontWeight: 900, margin: '0 0 6px 0', letterSpacing: '-0.5px' }}>{stats.totalNotes}</h3>
+          <span style={{ color: '#1e293b', fontSize: '14px', fontWeight: 700, display: 'block' }}>Notes Uploaded</span>
         </div>
-        <div style={{ padding: '15px', border: '1px solid #e2e8f0', borderRadius: '8px', textAlign: 'center', backgroundColor: '#f7fafc' }}>
-          <h3 style={{ margin: '0 0 5px 0', fontSize: '24px' }}>{stats.totalAttempts}</h3>
-          <span style={{ color: '#4a5568', fontSize: '14px' }}>Quiz Questions Answered</span>
+        <div style={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px 15px', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+          <h3 style={{ color: '#0f172a', fontSize: '36px', fontWeight: 900, margin: '0 0 6px 0', letterSpacing: '-0.5px' }}>{stats.totalAttempts}</h3>
+          <span style={{ color: '#1e293b', fontSize: '14px', fontWeight: 700, display: 'block' }}>Quiz Questions Answered</span>
         </div>
-        <div style={{ padding: '15px', border: '1px solid #e2e8f0', borderRadius: '8px', textAlign: 'center', backgroundColor: '#f7fafc' }}>
-          <h3 style={{ margin: '0 0 5px 0', fontSize: '24px' }}>{stats.accuracy}%</h3>
-          <span style={{ color: '#4a5568', fontSize: '14px' }}>Overall Accuracy</span>
+        <div style={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px 15px', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+          <h3 style={{ color: '#0f172a', fontSize: '36px', fontWeight: 900, margin: '0 0 6px 0', letterSpacing: '-0.5px' }}>{stats.accuracy}%</h3>
+          <span style={{ color: '#1e293b', fontSize: '14px', fontWeight: 700, display: 'block' }}>Overall Accuracy</span>
         </div>
       </section>
 
@@ -158,30 +158,31 @@ export default function DashboardPage() {
 
       {/* Notes List */}
       <section>
-        <h2>Your Study Notes</h2>
+        <h2 style={{ color: '#f8fafc', fontSize: '22px', fontWeight: 900, marginBottom: '16px' }}>Your Study Notes</h2>
         {notes.length === 0 ? (
-          <p style={{ color: '#666' }}>No notes uploaded yet. Click "+ Upload Note" above to get started.</p>
+          <p style={{ color: '#94a3b8', fontWeight: 600 }}>No notes uploaded yet. Click "+ Upload Note" above to get started.</p>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {notes.map(note => (
               <div
                 key={note.id}
                 style={{
-                  padding: '15px',
-                  border: '1px solid #cbd5e0',
-                  borderRadius: '6px',
+                  padding: '18px',
+                  borderRadius: '10px',
                   display: 'flex',
                   justifyContent: 'space-between',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  backgroundColor: '#1e293b',
+                  border: '1px solid #334155'
                 }}
               >
                 <div>
-                  <h3 style={{ margin: '0 0 5px 0' }}>{note.title}</h3>
-                  <p style={{ margin: 0, fontSize: '12px', color: '#718096' }}>
-                    Uploaded: {new Date(note.created_at).toLocaleDateString()} &bull; Status: {' '}
+                  <h3 style={{ margin: '0 0 6px 0', fontWeight: 800, color: '#f8fafc', fontSize: '16px' }}>{note.title}</h3>
+                  <p style={{ margin: 0, fontSize: '13px', color: '#94a3b8', fontWeight: 600 }}>
+                    Uploaded: {new Date(note.created_at).toLocaleDateString()} &bull; Status:{' '}
                     <span style={{
-                      fontWeight: 'bold',
-                      color: note.status === 'ready' || note.status === 'summarized' ? 'green' : note.status === 'error' ? 'red' : 'orange'
+                      fontWeight: 800,
+                      color: note.status === 'ready' || note.status === 'summarized' ? '#34d399' : note.status === 'error' ? '#ef4444' : '#fbbf24'
                     }}>
                       {note.status.toUpperCase()}
                     </span>
@@ -190,13 +191,13 @@ export default function DashboardPage() {
                 <div style={{ display: 'flex', gap: '10px' }}>
                   <Link
                     href={`/notes/${note.id}`}
-                    style={{ padding: '6px 12px', backgroundColor: '#4a5568', color: '#fff', textDecoration: 'none', borderRadius: '4px', fontSize: '14px' }}
+                    style={{ padding: '8px 14px', backgroundColor: '#334155', color: '#f8fafc', textDecoration: 'none', borderRadius: '6px', fontSize: '13px', fontWeight: 700 }}
                   >
                     View Details & Summary
                   </Link>
                   <Link
                     href={`/quiz/${note.id}`}
-                    style={{ padding: '6px 12px', backgroundColor: '#319795', color: '#fff', textDecoration: 'none', borderRadius: '4px', fontSize: '14px' }}
+                    style={{ padding: '8px 14px', backgroundColor: '#0d9488', color: '#ffffff', textDecoration: 'none', borderRadius: '6px', fontSize: '13px', fontWeight: 700 }}
                   >
                     Take Quiz
                   </Link>
