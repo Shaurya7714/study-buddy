@@ -64,7 +64,7 @@ export default function PomodoroTimer() {
     <div className="retro-window">
       {/* Window Header */}
       <div className="retro-window-header">
-        <span className="retro-window-title">TIMER</span>
+        <span className="retro-window-title">⏱️ TIMER</span>
         <div className="retro-window-controls">
           <div className="retro-control-btn">—</div>
           <div className="retro-control-btn">□</div>
@@ -79,13 +79,14 @@ export default function PomodoroTimer() {
           onClick={() => setShowSettings(!showSettings)}
           style={{
             position: 'absolute',
-            top: '12px',
-            right: '16px',
+            top: '16px',
+            right: '20px',
             background: 'none',
             border: 'none',
             fontSize: '18px',
             cursor: 'pointer',
-            color: '#4a2c11'
+            color: '#8b8fa3',
+            transition: 'color 0.2s ease'
           }}
           title="Timer Settings"
         >
@@ -97,8 +98,8 @@ export default function PomodoroTimer() {
           <div style={{
             fontSize: '72px',
             fontWeight: 900,
-            color: '#4a2c11',
-            fontFamily: "'Courier New', Courier, monospace",
+            color: '#f8fafc',
+            fontFamily: "'Inter', monospace",
             letterSpacing: '-2px',
             lineHeight: 1
           }}>
@@ -110,17 +111,17 @@ export default function PomodoroTimer() {
             <button
               onClick={() => setIsRunning(!isRunning)}
               style={{
-                padding: '10px 24px',
+                padding: '12px 28px',
                 borderRadius: '30px',
-                border: '2px solid #4a2c11',
-                backgroundColor: isRunning ? '#ebd8c3' : '#faf6f0',
-                color: '#4a2c11',
+                border: 'none',
+                background: isRunning ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                color: '#ffffff',
                 fontWeight: 900,
-                fontSize: '15px',
+                fontSize: '14px',
                 letterSpacing: '1px',
                 cursor: 'pointer',
-                boxShadow: '2px 2px 0px #4a2c11',
-                transition: 'all 0.15s ease'
+                boxShadow: isRunning ? '0 4px 20px rgba(245,158,11,0.3)' : '0 4px 20px rgba(99,102,241,0.3)',
+                transition: 'all 0.2s ease'
               }}
             >
               {isRunning ? 'PAUSE' : 'START'}
@@ -130,19 +131,19 @@ export default function PomodoroTimer() {
             <button
               onClick={handleReset}
               style={{
-                width: '42px',
-                height: '42px',
+                width: '44px',
+                height: '44px',
                 borderRadius: '50%',
-                border: '2px solid #4a2c11',
-                backgroundColor: '#faf6f0',
-                color: '#4a2c11',
+                border: '1px solid #2a2a3e',
+                backgroundColor: '#1a1a28',
+                color: '#f8fafc',
                 fontSize: '20px',
                 fontWeight: 900,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '2px 2px 0px #4a2c11'
+                transition: 'all 0.2s ease'
               }}
               title="Reset Timer"
             >
@@ -155,40 +156,40 @@ export default function PomodoroTimer() {
         {showSettings && (
           <div style={{
             margin: '0 auto 20px auto',
-            padding: '16px',
-            backgroundColor: '#e6d3be',
-            border: '2px solid #4a2c11',
-            borderRadius: '10px',
-            maxWidth: '320px',
+            padding: '16px 20px',
+            backgroundColor: '#1a1a28',
+            border: '1px solid #2a2a3e',
+            borderRadius: '12px',
+            maxWidth: '340px',
             textAlign: 'left'
           }}>
-            <p style={{ margin: '0 0 10px 0', fontWeight: 900, fontSize: '13px' }}>⚙ CUSTOM DURATIONS (MINUTES):</p>
+            <p style={{ margin: '0 0 12px 0', fontWeight: 800, fontSize: '12px', color: '#818cf8', letterSpacing: '1px' }}>⚙ CUSTOM DURATIONS (MINUTES)</p>
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'space-between' }}>
               <div>
-                <label style={{ fontSize: '11px', fontWeight: 800 }}>Pomo:</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#8b8fa3', display: 'block', marginBottom: '4px' }}>Pomo:</label>
                 <input
                   type="number"
                   value={durations.pomodoro / 60}
                   onChange={(e) => setDurations({ ...durations, pomodoro: Math.max(1, Number(e.target.value)) * 60 })}
-                  style={{ width: '60px', padding: '4px', border: '1.5px solid #4a2c11', borderRadius: '4px', textAlign: 'center', fontWeight: 700 }}
+                  style={{ width: '65px', padding: '6px', backgroundColor: '#12121a', border: '1px solid #2a2a3e', borderRadius: '6px', textAlign: 'center', fontWeight: 700, color: '#f8fafc' }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '11px', fontWeight: 800 }}>Short:</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#8b8fa3', display: 'block', marginBottom: '4px' }}>Short:</label>
                 <input
                   type="number"
                   value={durations.short / 60}
                   onChange={(e) => setDurations({ ...durations, short: Math.max(1, Number(e.target.value)) * 60 })}
-                  style={{ width: '60px', padding: '4px', border: '1.5px solid #4a2c11', borderRadius: '4px', textAlign: 'center', fontWeight: 700 }}
+                  style={{ width: '65px', padding: '6px', backgroundColor: '#12121a', border: '1px solid #2a2a3e', borderRadius: '6px', textAlign: 'center', fontWeight: 700, color: '#f8fafc' }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '11px', fontWeight: 800 }}>Long:</label>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: '#8b8fa3', display: 'block', marginBottom: '4px' }}>Long:</label>
                 <input
                   type="number"
                   value={durations.long / 60}
                   onChange={(e) => setDurations({ ...durations, long: Math.max(1, Number(e.target.value)) * 60 })}
-                  style={{ width: '60px', padding: '4px', border: '1.5px solid #4a2c11', borderRadius: '4px', textAlign: 'center', fontWeight: 700 }}
+                  style={{ width: '65px', padding: '6px', backgroundColor: '#12121a', border: '1px solid #2a2a3e', borderRadius: '6px', textAlign: 'center', fontWeight: 700, color: '#f8fafc' }}
                 />
               </div>
             </div>

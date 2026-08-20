@@ -1,9 +1,10 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 export default function TodoList() {
   const [todos, setTodos] = useState([])
   const [newTask, setNewTask] = useState('')
+  const inputRef = useRef(null)
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -12,7 +13,7 @@ export default function TodoList() {
       if (saved) {
         setTodos(JSON.parse(saved))
       } else {
-        // Initial default tasks matching retro study theme
+        // Initial default tasks matching study theme
         setTodos([
           { id: 1, text: 'Review Data Structures Notes', completed: false },
           { id: 2, text: 'Complete 1 Pomodoro Session', completed: true },
@@ -36,14 +37,22 @@ export default function TodoList() {
 
   const handleAdd = (e) => {
     if (e) e.preventDefault()
-    if (!newTask.trim()) return
-    const item = {
-      id: Date.now(),
-      text: newTask.trim(),
-      completed: false
+    
+    // If input has text, add the new task!
+    if (newTask.trim()) {
+      const item = {
+        id: Date.now(),
+        text: newTask.trim(),
+        completed: false
+      }
+      saveTodos([...todos, item])
+      setNewTask('')
+    } else {
+      // If input is empty, focus the input field so user can type!
+      if (inputRef.current) {
+        inputRef.current.focus()
+      }
     }
-    saveTodos([...todos, item])
-    setNewTask('')
   }
 
   const handleToggle = (id) => {
@@ -62,7 +71,7 @@ export default function TodoList() {
     <div className="retro-window">
       {/* Window Header */}
       <div className="retro-window-header">
-        <span className="retro-window-title">TO-DO-LIST</span>
+        <span className="retro-window-title">📋 TO-DO-LIST</span>
         <div className="retro-window-controls">
           <div className="retro-control-btn">—</div>
           <div className="retro-control-btn">□</div>
@@ -71,22 +80,22 @@ export default function TodoList() {
       </div>
 
       {/* Window Body */}
-      <div className="retro-window-body" style={{ minHeight: '260px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative' }}>
+      <div className="retro-window-body" style={{ minHeight: '300px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
 
         <div>
           {/* Task Counter */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', fontSize: '12px', fontWeight: 800 }}>
-            <span>TASKS ({todos.length})</span>
-            <span>{completedCount} / {todos.length} COMPLETED</span>
+            <span style={{ color: '#818cf8', letterSpacing: '1px' }}>TASKS ({todos.length})</span>
+            <span style={{ color: '#8b8fa3' }}>{completedCount} / {todos.length} COMPLETED</span>
           </div>
 
-          {/* New Task Input Line */}
-          <form onSubmit={handleAdd} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', borderBottom: '2px solid #4a2c11', paddingBottom: '6px' }}>
-            <span style={{ fontSize: '16px', opacity: 0.5 }}>:::</span>
-            <span style={{ fontSize: '18px', cursor: 'pointer' }} onClick={handleAdd}>☐</span>
+          {/* New Task Input Form */}
+          <form onSubmit={handleAdd} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', backgroundColor: '#1a1a28', padding: '10px 14px', borderRadius: '12px', border: '1px solid #2a2a3e' }}>
+            <span style={{ fontSize: '16px', color: '#6366f1' }}>✚</span>
             <input
+              ref={inputRef}
               type="text"
-              placeholder="Task title..."
+              placeholder="Type new task here..."
               value={newTask}
               onChange={(e) => setNewTask(e.target.value)}
               style={{
@@ -94,30 +103,30 @@ export default function TodoList() {
                 border: 'none',
                 background: 'none',
                 outline: 'none',
-                fontFamily: "'Courier New', Courier, monospace",
-                fontWeight: 800,
-                fontSize: '15px',
-                color: '#4a2c11'
+                fontWeight: 600,
+                fontSize: '14px',
+                color: '#f8fafc'
               }}
             />
             <button
               type="submit"
               style={{
-                background: 'none',
+                padding: '6px 14px',
+                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
                 border: 'none',
+                borderRadius: '8px',
                 cursor: 'pointer',
-                fontWeight: 900,
-                fontSize: '11px',
-                letterSpacing: '1px',
-                color: '#4a2c11'
+                fontWeight: 800,
+                fontSize: '12px',
+                color: '#ffffff'
               }}
             >
-              🕒 SET
+              ADD TASK
             </button>
           </form>
 
           {/* Task List */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '220px', overflowY: 'auto' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '220px', overflowY: 'auto' }}>
             {todos.map(todo => (
               <div
                 key={todo.id}
@@ -125,11 +134,13 @@ export default function TodoList() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '12px',
-                  borderBottom: '1px dashed #d6be9f',
-                  paddingBottom: '8px'
+                  backgroundColor: '#161622',
+                  padding: '12px 14px',
+                  borderRadius: '10px',
+                  border: '1px solid #1e1e2e',
+                  transition: 'all 0.2s ease'
                 }}
               >
-                <span style={{ fontSize: '14px', opacity: 0.4 }}>:::</span>
                 <input
                   type="checkbox"
                   checked={todo.completed}
@@ -137,16 +148,15 @@ export default function TodoList() {
                   style={{
                     width: '18px',
                     height: '18px',
-                    accentColor: '#4a2c11',
+                    accentColor: '#6366f1',
                     cursor: 'pointer'
                   }}
                 />
                 <span style={{
                   flex: 1,
-                  fontFamily: "'Courier New', Courier, monospace",
-                  fontWeight: 800,
+                  fontWeight: 600,
                   fontSize: '14px',
-                  color: todo.completed ? '#a88c74' : '#4a2c11',
+                  color: todo.completed ? '#64748b' : '#f8fafc',
                   textDecoration: todo.completed ? 'line-through' : 'none'
                 }}>
                   {todo.text}
@@ -158,7 +168,8 @@ export default function TodoList() {
                     border: 'none',
                     cursor: 'pointer',
                     fontSize: '16px',
-                    opacity: 0.7
+                    color: '#8b8fa3',
+                    transition: 'color 0.2s ease'
                   }}
                   title="Delete Task"
                 >
@@ -172,23 +183,25 @@ export default function TodoList() {
         {/* Floating Add Task Button in bottom-right */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
           <button
+            type="button"
             onClick={handleAdd}
             style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '8px',
-              border: '2px solid #4a2c11',
-              backgroundColor: '#4a2c11',
-              color: '#faf6f0',
-              fontSize: '20px',
+              width: '42px',
+              height: '42px',
+              borderRadius: '12px',
+              border: 'none',
+              background: 'linear-gradient(135deg, #10b981, #059669)',
+              color: '#ffffff',
+              fontSize: '22px',
               fontWeight: 900,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '2px 2px 0px #24140a'
+              boxShadow: '0 4px 16px rgba(16, 185, 129, 0.3)',
+              transition: 'all 0.2s ease'
             }}
-            title="Add Task"
+            title="Add New Task"
           >
             +
           </button>

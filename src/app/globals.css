@@ -288,19 +288,25 @@ body {
    ============================== */
 
 .retro-window {
-  background-color: #faf6f0;
-  border: 2px solid #4a2c11;
-  border-radius: 16px;
-  box-shadow: 6px 6px 0px #4a2c11, 0 12px 30px rgba(0,0,0,0.4);
+  background: #12121a;
+  border: 1px solid #1e1e2e;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
   overflow: hidden;
-  font-family: 'Courier New', Courier, monospace, sans-serif;
-  color: #4a2c11;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #f8fafc;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.retro-window:hover {
+  border-color: #2a2a3e;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .retro-window-header {
-  background-color: #e6d3be;
-  border-bottom: 2px solid #4a2c11;
-  padding: 10px 16px;
+  background: #1a1a28;
+  border-bottom: 1px solid #1e1e2e;
+  padding: 12px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -308,10 +314,13 @@ body {
 
 .retro-window-title {
   font-weight: 900;
-  font-size: 16px;
+  font-size: 14px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: #4a2c11;
+  color: #f8fafc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .retro-window-controls {
@@ -323,21 +332,23 @@ body {
 .retro-control-btn {
   width: 22px;
   height: 22px;
-  border-radius: 4px;
-  border: 1.5px solid #4a2c11;
-  background-color: #faf6f0;
+  border-radius: 6px;
+  border: 1px solid #2a2a3e;
+  background-color: #12121a;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 11px;
   font-weight: bold;
-  color: #4a2c11;
+  color: #8b8fa3;
   cursor: pointer;
   user-select: none;
+  transition: all 0.2s ease;
 }
 
 .retro-control-btn:hover {
-  background-color: #d6be9f;
+  background-color: #2a2a3e;
+  color: #f8fafc;
 }
 
 .retro-window-body {
@@ -347,19 +358,19 @@ body {
 /* Mode tabs for Pomodoro */
 .retro-tabs {
   display: flex;
-  border-top: 2px solid #4a2c11;
-  background-color: #e6d3be;
+  border-top: 1px solid #1e1e2e;
+  background-color: #1a1a28;
 }
 
 .retro-tab {
   flex: 1;
-  padding: 12px 8px;
+  padding: 14px 8px;
   text-align: center;
-  font-weight: 900;
-  font-size: 13px;
+  font-weight: 800;
+  font-size: 12px;
   letter-spacing: 1px;
-  color: #4a2c11;
-  border-right: 2px solid #4a2c11;
+  color: #8b8fa3;
+  border-right: 1px solid #1e1e2e;
   cursor: pointer;
   background-color: transparent;
   transition: all 0.2s ease;
@@ -370,8 +381,9 @@ body {
 }
 
 .retro-tab.active {
-  background-color: #faf6f0;
-  box-shadow: inset 0 3px 0 #4a2c11;
+  background-color: #12121a;
+  color: #818cf8;
+  box-shadow: inset 0 3px 0 #6366f1;
 }
 
 /* ==============================
