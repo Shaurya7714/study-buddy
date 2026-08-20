@@ -92,121 +92,225 @@ export default function DashboardPage() {
     router.push('/login')
   }
 
-  if (loading) return <p style={{ padding: '20px' }}>Loading Dashboard...</p>
+  const getGreeting = () => {
+    const hour = new Date().getHours()
+    if (hour < 12) return 'Good Morning'
+    if (hour < 17) return 'Good Afternoon'
+    return 'Good Evening'
+  }
+
+  if (loading) {
+    return (
+      <div className="bento-grid" style={{ minHeight: '100vh', alignContent: 'start' }}>
+        {[...Array(8)].map((_, i) => (
+          <div
+            key={i}
+            className="bento-skeleton"
+            style={{
+              gridColumn: i === 0 ? 'span 2' : 'span 1',
+              height: i === 0 ? '180px' : '140px'
+            }}
+          />
+        ))}
+      </div>
+    )
+  }
 
   return (
-    <div style={{ padding: '30px', maxWidth: '900px', margin: '0 auto' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid #475569', paddingBottom: '14px' }}>
+    <div className="bento-grid">
+
+      {/* ========== ROW 1: Hero + Stats ========== */}
+
+      {/* Welcome Hero Card */}
+      <div className="bento-card bento-hero bento-span-2" style={{ minHeight: '170px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <div>
-          <h1 style={{ margin: 0, color: '#f8fafc', fontSize: '26px', fontWeight: 900 }}>Study Buddy Dashboard</h1>
-          <p style={{ margin: '6px 0 0 0', color: '#94a3b8', fontSize: '14px', fontWeight: 600 }}>Logged in as: <strong style={{ color: '#f8fafc', fontWeight: 800 }}>{user?.email}</strong></p>
+          <p style={{ margin: '0 0 4px 0', fontSize: '13px', fontWeight: 700, color: '#60a5fa', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+            📚 Study Buddy
+          </p>
+          <h1 style={{ margin: '0 0 8px 0', fontSize: '28px', fontWeight: 900, color: '#f8fafc', lineHeight: 1.2 }}>
+            {getGreeting()}, <br />
+            <span style={{ color: '#93c5fd' }}>{user?.email?.split('@')[0]}</span>
+          </h1>
+          <p style={{ margin: 0, fontSize: '13px', fontWeight: 600, color: '#64748b' }}>
+            {user?.email}
+          </p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* Flame streak badge */}
-          <div style={{ padding: '6px 14px', backgroundColor: '#78350f', border: '1px solid #b45309', borderRadius: '20px', fontWeight: 800, color: '#fbbf24', fontSize: '14px' }}>
-            🔥 {streak.streak} Day Streak
+        <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+          <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 700, backgroundColor: 'rgba(99,102,241,0.15)', color: '#a5b4fc', border: '1px solid rgba(99,102,241,0.3)' }}>
+            {stats.totalNotes} Notes
+          </span>
+          <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 700, backgroundColor: 'rgba(20,184,166,0.15)', color: '#5eead4', border: '1px solid rgba(20,184,166,0.3)' }}>
+            {stats.totalAttempts} Quizzes
+          </span>
+        </div>
+      </div>
+
+      {/* Notes Count Stat */}
+      <div className="bento-card bento-stat bento-stat-blue">
+        <div className="stat-value">{stats.totalNotes}</div>
+        <div className="stat-title">Notes</div>
+      </div>
+
+      {/* Accuracy Stat */}
+      <div className="bento-card bento-stat bento-stat-teal">
+        <div className="stat-value">{stats.accuracy}%</div>
+        <div className="stat-title">Accuracy</div>
+      </div>
+
+      {/* ========== ROW 2: Streak + Quiz + Review ========== */}
+
+      {/* Streak Card */}
+      <div className="bento-card bento-streak">
+        <div className="streak-flame">🔥</div>
+        <div className="streak-count">{streak.streak}</div>
+        <div className="streak-label">Day Streak</div>
+      </div>
+
+      {/* Quiz Attempts Stat */}
+      <div className="bento-card bento-stat bento-stat-purple">
+        <div className="stat-value">{stats.totalAttempts}</div>
+        <div className="stat-title">Quizzes Taken</div>
+      </div>
+
+      {/* Review CTA Card */}
+      <Link href="/review" style={{ textDecoration: 'none', gridColumn: 'span 2' }}>
+        <div className="bento-card bento-review" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '28px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div>
+              <p style={{ margin: '0 0 6px 0', fontSize: '13px', fontWeight: 700, color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Spaced Repetition
+              </p>
+              <h2 style={{ margin: '0 0 6px 0', fontSize: '22px', fontWeight: 900, color: '#f8fafc' }}>
+                🔁 {dueCount > 0 ? `${dueCount} Questions Due` : 'All Caught Up!'}
+              </h2>
+              <p style={{ margin: 0, fontSize: '13px', fontWeight: 600, color: '#818cf8' }}>
+                {dueCount > 0 ? 'SM-2 recommends reviewing now →' : 'Check back tomorrow for reviews'}
+              </p>
+            </div>
+            <div style={{ fontSize: '48px', opacity: 0.3 }}>🧠</div>
           </div>
+        </div>
+      </Link>
 
-          <button
-            onClick={() => router.push('/upload')}
-            style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#0070f3', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 800, fontSize: '14px' }}
-          >
-            + Upload Note
-          </button>
-          <button
-            onClick={handleLogout}
-            style={{ padding: '8px 16px', cursor: 'pointer', backgroundColor: '#dc2626', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 800, fontSize: '14px' }}
-          >
-            Log Out
-          </button>
-        </div>
-      </header>
+      {/* ========== ROW 3: Charts ========== */}
 
-      {/* Due Review Banner */}
-      {dueCount > 0 && (
-        <div style={{ marginBottom: '25px', padding: '18px 22px', backgroundColor: '#1e3a8a', border: '1px solid #3b82f6', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h3 style={{ margin: '0 0 4px 0', color: '#93c5fd', fontWeight: 800, fontSize: '16px' }}>🔁 {dueCount} Questions Due for Review Today!</h3>
-            <p style={{ margin: 0, fontSize: '13px', color: '#bfdbfe', fontWeight: 600 }}>SM-2 Spaced Repetition algorithms recommend reviewing these now for long-term retention.</p>
-          </div>
-          <Link href="/review" style={{ padding: '10px 18px', backgroundColor: '#3b82f6', color: '#fff', textDecoration: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '14px' }}>
-            Start Review &rarr;
-          </Link>
-        </div>
-      )}
-
-      {/* Stats Cards */}
-      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', marginBottom: '30px' }}>
-        <div style={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px 15px', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
-          <h3 style={{ color: '#0f172a', fontSize: '36px', fontWeight: 900, margin: '0 0 6px 0', letterSpacing: '-0.5px' }}>{stats.totalNotes}</h3>
-          <span style={{ color: '#1e293b', fontSize: '14px', fontWeight: 700, display: 'block' }}>Notes Uploaded</span>
-        </div>
-        <div style={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px 15px', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
-          <h3 style={{ color: '#0f172a', fontSize: '36px', fontWeight: 900, margin: '0 0 6px 0', letterSpacing: '-0.5px' }}>{stats.totalAttempts}</h3>
-          <span style={{ color: '#1e293b', fontSize: '14px', fontWeight: 700, display: 'block' }}>Quiz Questions Answered</span>
-        </div>
-        <div style={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px 15px', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
-          <h3 style={{ color: '#0f172a', fontSize: '36px', fontWeight: 900, margin: '0 0 6px 0', letterSpacing: '-0.5px' }}>{stats.accuracy}%</h3>
-          <span style={{ color: '#1e293b', fontSize: '14px', fontWeight: 700, display: 'block' }}>Overall Accuracy</span>
-        </div>
-      </section>
-
-      {/* Charts Section */}
       {attempts.length > 0 && (
         <RechartsComponents attempts={attempts} />
       )}
 
-      {/* Notes List */}
-      <section>
-        <h2 style={{ color: '#f8fafc', fontSize: '22px', fontWeight: 900, marginBottom: '16px' }}>Your Study Notes</h2>
+      {/* ========== ROW 4: Notes List ========== */}
+
+      <div className="bento-card bento-span-4" style={{ padding: '28px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 900, color: '#f8fafc' }}>
+            📚 Your Study Notes
+          </h2>
+          <span style={{ fontSize: '13px', fontWeight: 700, color: '#8b8fa3' }}>
+            {notes.length} {notes.length === 1 ? 'note' : 'notes'}
+          </span>
+        </div>
+
         {notes.length === 0 ? (
-          <p style={{ color: '#94a3b8', fontWeight: 600 }}>No notes uploaded yet. Click "+ Upload Note" above to get started.</p>
+          <div style={{ textAlign: 'center', padding: '40px 20px', borderRadius: '14px', border: '2px dashed #1e1e2e' }}>
+            <p style={{ fontSize: '40px', margin: '0 0 12px 0' }}>📝</p>
+            <p style={{ color: '#8b8fa3', fontWeight: 700, fontSize: '15px', margin: '0 0 4px 0' }}>No notes uploaded yet</p>
+            <p style={{ color: '#4a4e63', fontWeight: 600, fontSize: '13px', margin: 0 }}>Click "Upload Note" below to get started</p>
+          </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
             {notes.map(note => (
-              <div
-                key={note.id}
-                style={{
-                  padding: '18px',
-                  borderRadius: '10px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  backgroundColor: '#1e293b',
-                  border: '1px solid #334155'
-                }}
-              >
-                <div>
-                  <h3 style={{ margin: '0 0 6px 0', fontWeight: 800, color: '#f8fafc', fontSize: '16px' }}>{note.title}</h3>
-                  <p style={{ margin: 0, fontSize: '13px', color: '#94a3b8', fontWeight: 600 }}>
-                    Uploaded: {new Date(note.created_at).toLocaleDateString()} &bull; Status:{' '}
-                    <span style={{
-                      fontWeight: 800,
-                      color: note.status === 'ready' || note.status === 'summarized' ? '#34d399' : note.status === 'error' ? '#ef4444' : '#fbbf24'
-                    }}>
-                      {note.status.toUpperCase()}
-                    </span>
-                  </p>
+              <div key={note.id} className="bento-note">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                  <h3 style={{ margin: 0, fontWeight: 800, color: '#f8fafc', fontSize: '15px', lineHeight: 1.3 }}>
+                    {note.title}
+                  </h3>
+                  <span style={{
+                    padding: '3px 10px',
+                    borderRadius: '12px',
+                    fontSize: '11px',
+                    fontWeight: 800,
+                    letterSpacing: '0.5px',
+                    flexShrink: 0,
+                    marginLeft: '8px',
+                    backgroundColor: note.status === 'ready' || note.status === 'summarized'
+                      ? 'rgba(16,185,129,0.15)' : note.status === 'error'
+                      ? 'rgba(239,68,68,0.15)' : 'rgba(245,158,11,0.15)',
+                    color: note.status === 'ready' || note.status === 'summarized'
+                      ? '#34d399' : note.status === 'error'
+                      ? '#f87171' : '#fbbf24',
+                  }}>
+                    {note.status.toUpperCase()}
+                  </span>
                 </div>
-                <div style={{ display: 'flex', gap: '10px' }}>
+                <p style={{ margin: '0 0 14px 0', fontSize: '12px', color: '#8b8fa3', fontWeight: 600 }}>
+                  {new Date(note.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </p>
+                <div style={{ display: 'flex', gap: '8px' }}>
                   <Link
                     href={`/notes/${note.id}`}
-                    style={{ padding: '8px 14px', backgroundColor: '#334155', color: '#f8fafc', textDecoration: 'none', borderRadius: '6px', fontSize: '13px', fontWeight: 700 }}
+                    style={{
+                      flex: 1,
+                      padding: '8px 12px',
+                      backgroundColor: '#1e1e2e',
+                      color: '#e2e8f0',
+                      textDecoration: 'none',
+                      borderRadius: '10px',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      textAlign: 'center',
+                      border: '1px solid #2a2a3e',
+                      transition: 'all 0.2s ease'
+                    }}
                   >
-                    View Details & Summary
+                    View Details
                   </Link>
                   <Link
                     href={`/quiz/${note.id}`}
-                    style={{ padding: '8px 14px', backgroundColor: '#0d9488', color: '#ffffff', textDecoration: 'none', borderRadius: '6px', fontSize: '13px', fontWeight: 700 }}
+                    style={{
+                      flex: 1,
+                      padding: '8px 12px',
+                      background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                      color: '#ffffff',
+                      textDecoration: 'none',
+                      borderRadius: '10px',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      textAlign: 'center',
+                      border: 'none',
+                      transition: 'all 0.2s ease'
+                    }}
                   >
-                    Take Quiz
+                    Take Quiz →
                   </Link>
                 </div>
               </div>
             ))}
           </div>
         )}
-      </section>
+      </div>
+
+      {/* ========== ROW 5: Quick Actions ========== */}
+
+      {/* Upload Note Action */}
+      <div
+        className="bento-card bento-action bento-action-upload bento-span-2"
+        onClick={() => router.push('/upload')}
+      >
+        <span className="action-icon">📄</span>
+        <span className="action-label">+ Upload New Note</span>
+        <span style={{ fontSize: '12px', fontWeight: 600, color: '#6ee7b7' }}>PDF supported</span>
+      </div>
+
+      {/* Logout Action */}
+      <div
+        className="bento-card bento-action bento-action-logout bento-span-2"
+        onClick={handleLogout}
+      >
+        <span className="action-icon">👋</span>
+        <span className="action-label">Log Out</span>
+        <span style={{ fontSize: '12px', fontWeight: 600, color: '#a8a29e' }}>See you next time</span>
+      </div>
+
     </div>
   )
 }

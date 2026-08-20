@@ -4,7 +4,7 @@ import {
   PieChart, Pie, Cell, Legend
 } from 'recharts'
 
-const COLORS = ['#38a169', '#e53e3e']
+const COLORS = ['#10b981', '#f43f5e']
 
 export default function DashboardCharts({ attempts }) {
   // --- Accuracy over time (grouped by date) ---
@@ -31,49 +31,54 @@ export default function DashboardCharts({ attempts }) {
   ]
 
   return (
-    <section style={{ marginBottom: '30px' }}>
-      <h2>Your Progress</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-
-        {/* Accuracy over time bar chart */}
-        <div style={{ border: '1px solid #334155', borderRadius: '12px', padding: '20px', backgroundColor: '#1e293b' }}>
-          <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', color: '#f8fafc', fontWeight: 'bold' }}>Accuracy Over Time</h3>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={accuracyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#94a3b8' }} />
-              <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#94a3b8' }} unit="%" />
-              <Tooltip formatter={(value) => `${value}%`} contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f8fafc' }} />
-              <Bar dataKey="accuracy" fill="#38bdf8" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Correct vs Incorrect pie chart */}
-        <div style={{ border: '1px solid #334155', borderRadius: '12px', padding: '20px', backgroundColor: '#1e293b' }}>
-          <h3 style={{ margin: '0 0 15px 0', fontSize: '16px', color: '#f8fafc', fontWeight: 'bold' }}>Correct vs Incorrect</h3>
-          <ResponsiveContainer width="100%" height={220}>
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                innerRadius={50}
-                outerRadius={80}
-                dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
+    <>
+      {/* Accuracy over time bar chart */}
+      <div className="bento-card bento-chart bento-span-2">
+        <h3>📊 Accuracy Over Time</h3>
+        <ResponsiveContainer width="100%" height={200}>
+          <BarChart data={accuracyData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#1e1e2e" />
+            <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#8b8fa3' }} />
+            <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#8b8fa3' }} unit="%" />
+            <Tooltip
+              formatter={(value) => `${value}%`}
+              contentStyle={{ backgroundColor: '#12121a', borderColor: '#1e1e2e', color: '#f8fafc', borderRadius: '12px', fontWeight: 700 }}
+            />
+            <Bar dataKey="accuracy" fill="url(#barGradient)" radius={[6, 6, 0, 0]} />
+            <defs>
+              <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#6366f1" />
+                <stop offset="100%" stopColor="#8b5cf6" />
+              </linearGradient>
+            </defs>
+          </BarChart>
+        </ResponsiveContainer>
       </div>
-    </section>
+
+      {/* Correct vs Incorrect pie chart */}
+      <div className="bento-card bento-chart bento-span-2">
+        <h3>🎯 Correct vs Incorrect</h3>
+        <ResponsiveContainer width="100%" height={200}>
+          <PieChart>
+            <Pie
+              data={pieData}
+              cx="50%"
+              cy="50%"
+              innerRadius={55}
+              outerRadius={80}
+              dataKey="value"
+              strokeWidth={0}
+              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            >
+              {pieData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index]} />
+              ))}
+            </Pie>
+            <Tooltip contentStyle={{ backgroundColor: '#12121a', borderColor: '#1e1e2e', color: '#f8fafc', borderRadius: '12px', fontWeight: 700 }} />
+            <Legend wrapperStyle={{ color: '#8b8fa3', fontWeight: 700, fontSize: '13px' }} />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+    </>
   )
 }
